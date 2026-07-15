@@ -1,0 +1,104 @@
+datasource db {
+  provider = "postgresql"
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum Role {
+  TRADER
+  CUSTOMER
+}
+
+enum PaymentMethod {
+  CASH
+  MOBILE_MONEY
+  CARD
+  TRANSFER
+}
+
+enum TransactionStatus {
+  PENDING
+  SUCCESSFUL
+  FAILED
+}
+
+model User {
+  id        String    @id @default(uuid())
+  name      String
+  email     String    @unique
+  password  String    // Hashed
+  phone     String?
+  role      Role      @default(TRADER)
+  createdAt DateTime  @default(now())
+  business  Business?
+}
+
+model Business {
+  id           String        @id @default(uuid())
+  userId       String        @unique
+  user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  businessName String
+  market       String        // e.g., "Balogun Market", "Kejetia Market"
+  shopNumber   String
+  description  String?
+  category     String        // e.g., "Grains", "Provisions", "Textiles"
+  profileImage String?
+  reputation   Float         @default(5.0)
+  qrCode       String?       // Raw string or link for the business card QR
+  products     Product[]
+  sales        Sale[]
+  transactions Transaction[]
+  reviews      Review[]
+  createdAt    DateTime      @default(now())
+}
+
+model Product {
+  id         String   @id @default(uuid())
+  businessId String
+  business   Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  name       String
+  price      Float
+  stock   Int      // Current stock level
+  category   String
+  image      String?
+  sales      Sale[]
+  createdAt  DateTime @default(now())
+}
+
+model Sale {
+  id            String        @id @default(uuid())
+  businessId    String
+  business      Business      @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  productId     String
+  product       Product       @relation(fields: [productId], references: [id])
+  quantity      Int
+  amount        Float
+  paymentMethod PaymentMethod @default(CASH)
+  customerName  String?
+  transactionId String?       @unique
+  transaction   Transaction?  @relation(fields: [transactionId], references: [id])
+  createdAt     DateTime      @default(now())
+}
+
+model Transaction {
+  id         String            @id @default(uuid())
+  businessId String
+  business   Business          @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  amount     Float
+  status     TransactionStatus @default(SUCCESSFUL)
+  receiptId  String            @unique // Unique verification token encoded in receipt QR
+  sale       Sale?
+  createdAt  DateTime          @default(now())
+}
+
+model Review {
+  id         String   @id @default(uuid())
+  businessId String
+  business   Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  rating     Int      
+  comment    String?
+  customer   String   @default("Anonymous Buyer")
+  createdAt  DateTime @default(now())
+}
