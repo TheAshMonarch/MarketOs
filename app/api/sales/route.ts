@@ -60,7 +60,6 @@ export async function POST(request: Request) {
           quantity: parseInt(quantity),
           amount: totalAmount,
           paymentMethod: paymentMethod || "CASH",
-          status: "COMPLETED",
           businessId,
         },
       });
