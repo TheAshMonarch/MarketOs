@@ -57,7 +57,7 @@ async function main() {
         businessId: demoBusiness.id,
         name: "5L Vegetable Cooking Oil",
         price: 180.0, // e.g., in local units (GHS/KES)
-        quantity: 12,  // Low stock warning trigger
+        stock: 12,  // Low stock warning trigger
         category: "Provisions",
       },
     }),
@@ -66,7 +66,7 @@ async function main() {
         businessId: demoBusiness.id,
         name: "25kg Premium Jasmine Rice",
         price: 320.0,
-        quantity: 45,
+        stock: 45,
         category: "Grains",
       },
     }),
@@ -75,7 +75,7 @@ async function main() {
         businessId: demoBusiness.id,
         name: "Box of Spaghetti (40pcs)",
         price: 110.0,
-        quantity: 4,   // Critical stock alert
+        stock: 4,   // Critical stock alert
         category: "Provisions",
       },
     }),
@@ -84,7 +84,7 @@ async function main() {
         businessId: demoBusiness.id,
         name: "1kg Refined White Sugar",
         price: 45.0,
-        quantity: 80,
+        stock: 80,
         category: "Provisions",
       },
     }),
