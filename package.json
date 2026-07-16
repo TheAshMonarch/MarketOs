@@ -2,12 +2,13 @@
   "name": "marketos",
   "version": "0.1.0",
   "private": true,
-  "scripts": {
-    "dev": "next dev",
-    "build": "next build",
+"scripts": {
+  "dev": "next dev",
+  "build": "prisma generate && next build",
     "start": "next start",
-    "lint": "eslint",
-    "db:sync": "prisma db push && prisma generate"
+  "lint": "next lint",
+  "postinstall": "prisma generate",
+  "db:sync": "prisma db push && prisma generate"
   },
   "dependencies": {
     "@auth/core": "^0.34.3",
